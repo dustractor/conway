@@ -1,6 +1,7 @@
 bl_info = {
     "name":"Conway",
     "category":"Mesh",
+    "version":(0,2),
     "blender":(2,80,0)
 }
 import bpy,bmesh
