@@ -52,13 +52,29 @@ class CONWAY_OT_conway(bpy.types.Operator):
         bpy.ops.object.mode_set(mode="EDIT")
         return {"FINISHED"}
 
+def handler(scene):
+    bpy.ops.conway.conway()
+
+def deal_with_handlers(self,context):
+    if self.conway_post:
+        if handler not in bpy.app.handlers.frame_change_post:
+            bpy.app.handlers.frame_change_post.append(handler)
+    else:
+        if handler in bpy.app.handlers.frame_change_post:
+            bpy.app.handlers.frame_change_post.remove(handler)
+
 def menuitem(self,context):
     self.layout.operator("conway.conway")
+    self.layout.prop(context.window_manager,"conway_post")
+
 
 def register():
     bpy.utils.register_class(CONWAY_OT_conway)
     bpy.types.VIEW3D_MT_select_edit_mesh.append(menuitem)
+    bpy.types.WindowManager.conway_post = bpy.props.BoolProperty(update=deal_with_handlers)
+
 
 def unregister():
     bpy.utils.unregister_class(CONWAY_OT_conway)
+    del bpy.types.WindowManager.conway_post
 
